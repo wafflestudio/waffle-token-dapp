@@ -64,10 +64,10 @@
     "web3": "1.7.0"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-app-rewired eject",
     "start:prod": "yarn run build && serve -s build",
     "test:generators": "ts-node ./internals/testing/generators/test-generators.ts",
     "checkTs": "tsc --noEmit",
@@ -120,5 +120,16 @@
         "statements": 90
       }
     }
+  },
+  "devDependencies": {
+    "assert": "2.0.0",
+    "buffer": "6.0.3",
+    "crypto-browserify": "3.12.0",
+    "https-browserify": "1.0.0",
+    "os-browserify": "0.3.0",
+    "react-app-rewired": "2.1.11",
+    "stream-browserify": "3.0.0",
+    "stream-http": "3.2.0",
+    "url": "0.11.0"
   }
 }
