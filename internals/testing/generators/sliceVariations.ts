@@ -13,12 +13,12 @@ export const sliceVariations = (): SliceVariationType => {
     },
     {
       sliceName: `${sliceNameBase}2`,
-      path: `/pages/HomePage`,
+      path: `/pages/MainPage`,
       wantSaga: false,
     },
     {
       sliceName: `${sliceNameBase}3`,
-      path: `/pages/HomePage/Features`,
+      path: `/pages/MainPage/Features`,
       wantSaga: true,
     },
   ];

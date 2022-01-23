@@ -23,6 +23,4 @@ const Wrapper = styled.div`
   font-size: 2.5rem;
 `;
 
-const Header = () => <Wrapper>Waffle Token Dapp</Wrapper>;
-
-export default Header;
+export const Header = () => <Wrapper>Waffle Token Dapp</Wrapper>;

@@ -12,24 +12,26 @@ import { Switch, Route, BrowserRouter } from 'react-router-dom';
 
 import { GlobalStyle } from 'styles/global-styles';
 
-import { HomePage } from './pages/HomePage/Loadable';
+import { MainPage } from './pages/MainPage/Loadable';
 import { NotFoundPage } from './components/NotFoundPage/Loadable';
 import { useTranslation } from 'react-i18next';
+import { WafflePage } from './components/WafflePage';
 
 export function App() {
   const { i18n } = useTranslation();
   return (
     <BrowserRouter>
       <Helmet
-        titleTemplate="%s - React Boilerplate"
-        defaultTitle="React Boilerplate"
+        titleTemplate="%s"
+        defaultTitle="Waffle Token Dapp"
         htmlAttributes={{ lang: i18n.language }}
       >
-        <meta name="description" content="A React Boilerplate application" />
+        <meta name="description" content="Waffle Studio Dapp" />
       </Helmet>
 
       <Switch>
-        <Route exact path="/" component={HomePage} />
+        <Route exact path="/" component={MainPage} />
+        <Route exact path="/waffle/:id" component={WafflePage} />
         <Route component={NotFoundPage} />
       </Switch>
       <GlobalStyle />
