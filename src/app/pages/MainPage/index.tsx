@@ -9,8 +9,12 @@ import { Header } from 'app/components/Commons';
 import { WAFFLE_TOKEN_ADDRESS, WAFFLE_TOKEN_ABI } from 'config';
 import { WAFFLE_FLAVORS, WAFFLE_COLORS } from 'types';
 import { useHistory } from 'react-router-dom';
+import { useMainSlice } from './slice';
+import { useDispatch } from 'react-redux';
 
 export function MainPage() {
+  const { actions } = useMainSlice();
+  const dispatch = useDispatch();
   const history = useHistory();
   const [account, setAccount] = useState<string>('');
   const [waffleToken, setWaffleToken] = useState<Contract | null>(null);
@@ -30,11 +34,11 @@ export function MainPage() {
       WAFFLE_TOKEN_ADDRESS,
     );
     setWaffleToken(waffleTkn);
+    dispatch(actions.setContract(waffleTkn));
     // Then we get total number of contacts for iteration
     // TODO: 하드코딩된 부분 없애기 => 전체 토큰 개수 알 수 있는 method 필요
     for (let i = 0; i < 10; i++) {
       const wftk = await waffleTkn.methods.idToWaffle(3 * i).call();
-      console.log(wftk);
       // add recently fetched contact to state variable.
       setWaffles(wftks => [...wftks, wftk]);
     }

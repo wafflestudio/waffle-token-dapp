@@ -15,7 +15,7 @@ import { GlobalStyle } from 'styles/global-styles';
 import { MainPage } from './pages/MainPage/Loadable';
 import { NotFoundPage } from './components/NotFoundPage/Loadable';
 import { useTranslation } from 'react-i18next';
-import { WafflePage } from './components/WafflePage';
+import { WafflePage } from './pages/WafflePage';
 
 export function App() {
   const { i18n } = useTranslation();
