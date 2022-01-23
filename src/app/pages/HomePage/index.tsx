@@ -7,21 +7,44 @@ import styled from 'styled-components/macro';
 
 import Header from 'app/components/Commons/Header';
 import { WAFFLE_TOKEN_ADDRESS, WAFFLE_TOKEN_ABI } from 'config';
-import { WAFFLE_FLAVORS } from 'types';
+import { WAFFLE_FLAVORS, WAFFLE_COLORS } from 'types';
+
+const Account = styled.div`
+  font-size: 1.5em;
+  text-align: center;
+  color: cornflowerblue;
+`;
+
+const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const ListHeader = styled.h1`
+  text-align: center;
+  color: #705112;
+`;
+
+const TokenList = styled.ul`
+  justify-content: center;
+  align-item: center;
+`;
+const TokenListRow = styled.li`
+  justify-content: center;
+  cursor: pointer;
+`;
+const H4 = styled.h4<{ flavor: string }>`
+  color: ${props => WAFFLE_COLORS[props.flavor]};
+`;
+
+const Span = styled.span<{ flavor: string }>`
+  color: ${props => WAFFLE_COLORS[props.flavor]};
+`;
+const B = styled.b``;
+
 export function HomePage() {
-  const Account = styled.div`
-    font-size: 1.5em;
-    text-align: center;
-    color: cornflowerblue;
-  `;
-
-  const Container = styled.div`
-    display: flex;
-    flex-direction: column;
-  `;
-
   const [account, setAccount] = useState<string>('');
-  const [waffleToken, setWaffleToken] = useState<Contract>();
+  const [waffleToken, setWaffleToken] = useState<Contract | null>(null);
   const [waffles, setWaffles] = useState<Waffle[]>([]);
 
   async function loadAccount() {
@@ -51,12 +74,12 @@ export function HomePage() {
   useEffect(() => {
     loadAccount();
     loadWaffles();
+    return () => {
+      setAccount('');
+      setWaffles([]);
+      setWaffleToken(null);
+    };
   }, []);
-
-  const getFlavor = (flavor: string) => {
-    const f: WAFFLE_FLAVOR = WAFFLE_FLAVORS[flavor];
-    return f;
-  };
 
   return (
     <>
@@ -67,18 +90,18 @@ export function HomePage() {
       <Container>
         <Header />
         <Account draggable="true">your account is {account}</Account>
-        <h1>Waffle Tokens</h1>
-        <ul>
+        <ListHeader>Waffle Tokens</ListHeader>
+        <TokenList>
           {waffles.map((waffle, index) => (
-            <li key={`${waffle.name}-${index}`}>
-              <h4>{waffle.name}</h4>
-              <span>
-                <b>Flavor: </b>
+            <TokenListRow key={`${waffle.name}-${index}`}>
+              <H4 flavor={waffle.flavor}>{waffle.name}</H4>
+              <Span flavor={waffle.flavor}>
+                <B>Flavor: </B>
                 {WAFFLE_FLAVORS[waffle.flavor]}
-              </span>
-            </li>
+              </Span>
+            </TokenListRow>
           ))}
-        </ul>
+        </TokenList>
       </Container>
     </>
   );
