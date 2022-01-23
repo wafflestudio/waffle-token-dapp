@@ -36,11 +36,12 @@ export function MainPage() {
     dispatch(actions.setContract(waffleTkn));
     // Then we get total number of contacts for iteration
     // TODO: 하드코딩된 부분 없애기
-    for (let i = 0; i < 36; i++) {
-      const wftk = await waffleTkn.methods.idToWaffle(i).call();
-      // add recently fetched contact to state variable.
-      setWaffles(wftks => [...wftks, wftk]);
-    }
+    const newWFTKs = await Promise.all(
+      Array(36)
+        .fill(0)
+        .map((_, i) => waffleTkn.methods.idToWaffle(i).call()),
+    );
+    setWaffles(wftks => [...wftks, ...newWFTKs]);
   }
 
   useEffect(() => {
@@ -67,7 +68,7 @@ export function MainPage() {
         <Header />
         <TokenList>
           {waffles
-            .filter(value => value.name != '')
+            .filter(value => value.name !== '')
             .map((waffle, index) => (
               <TokenListRow
                 key={`${waffle.name}-${index}`}
@@ -104,13 +105,11 @@ const Container = styled.div`
 `;
 
 const TokenList = styled.div`
-  //justify-content: center;
   display: flex;
   flex-flow: row wrap;
 `;
 
 const TokenListRow = styled.div<{ flavor: string }>`
-  //justify-content: center;
   cursor: pointer;
   flex-flow: column;
   text-align: center;
@@ -123,7 +122,7 @@ const TokenListRow = styled.div<{ flavor: string }>`
   color: #5b4131;
 
   ${({ flavor }) =>
-    flavor == '1' &&
+    flavor === '1' &&
     `
     color: #F3E5AB;
   `}
