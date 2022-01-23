@@ -104,13 +104,13 @@ const WaffleWrapper = styled.div<{ flavor: string }>`
 
 const HorizontalLine = styled.div<{ index: string }>`
   position: relative;
-  background-color: white;
+  background-color: burlywood;
   height: 10px;
   top: ${props => (100 / 8) * Number(props.index)}vh;
 `;
 const VerticalLine = styled.div<{ index: string }>`
   position: absolute;
-  background-color: white;
+  background-color: burlywood;
   width: 10px;
   height: 95vh;
   left: ${props => (100 / 8) * Number(props.index)}vw;

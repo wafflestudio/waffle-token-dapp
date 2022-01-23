@@ -4,7 +4,6 @@ import { AbiItem } from 'web3-utils';
 import { Contract } from 'web3-eth-contract';
 import { Helmet } from 'react-helmet-async';
 import styled from 'styled-components/macro';
-
 import { Header } from 'app/components/Commons';
 import { WAFFLE_TOKEN_ADDRESS, WAFFLE_TOKEN_ABI } from 'config';
 import { WAFFLE_FLAVORS, WAFFLE_COLORS } from 'types';
@@ -36,12 +35,13 @@ export function MainPage() {
     setWaffleToken(waffleTkn);
     dispatch(actions.setContract(waffleTkn));
     // Then we get total number of contacts for iteration
-    // TODO: 하드코딩된 부분 없애기 => 전체 토큰 개수 알 수 있는 method 필요
-    for (let i = 0; i < 10; i++) {
-      const wftk = await waffleTkn.methods.idToWaffle(3 * i).call();
-      // add recently fetched contact to state variable.
-      setWaffles(wftks => [...wftks, wftk]);
-    }
+    // TODO: 하드코딩된 부분 없애기
+    const newWFTKs = await Promise.all(
+      Array(36)
+        .fill(0)
+        .map((_, i) => waffleTkn.methods.idToWaffle(i).call()),
+    );
+    setWaffles(wftks => [...wftks, ...newWFTKs]);
   }
 
   useEffect(() => {
@@ -64,26 +64,28 @@ export function MainPage() {
         <meta name="description" content="WaffleToken Main Page" />
       </Helmet>
       <Container>
+        <Account draggable="true">logged in as {account}</Account>
         <Header />
-        <Account draggable="true">your account is {account}</Account>
-        <ListHeader>Waffle Tokens</ListHeader>
         <TokenList>
-          {waffles.map((waffle, index) => (
-            <TokenListRow
-              key={`${waffle.name}-${index}`}
-              onClick={e => {
-                e.preventDefault();
-                console.log(index);
-                history.push(`/waffle/${index}`);
-              }}
-            >
-              <H4 flavor={waffle.flavor}>{waffle.name}</H4>
-              <Span flavor={waffle.flavor}>
-                <B>Flavor: </B>
-                {WAFFLE_FLAVORS[waffle.flavor]}
-              </Span>
-            </TokenListRow>
-          ))}
+          {waffles
+            .filter(value => value.name !== '')
+            .map((waffle, index) => (
+              <TokenListRow
+                key={`${waffle.name}-${index}`}
+                onClick={e => {
+                  e.preventDefault();
+                  console.log(index);
+                  history.push(`/waffle/${index}`);
+                }}
+                flavor={waffle.flavor}
+              >
+                <h4>{waffle.name}</h4>
+                <span>
+                  <B>Flavor: </B>
+                  {WAFFLE_FLAVORS[waffle.flavor]}
+                </span>
+              </TokenListRow>
+            ))}
         </TokenList>
       </Container>
     </>
@@ -93,7 +95,8 @@ export function MainPage() {
 const Account = styled.div`
   font-size: 1.5em;
   text-align: center;
-  color: cornflowerblue;
+  color: white;
+  background-color: burlywood;
 `;
 
 const Container = styled.div`
@@ -101,24 +104,28 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const ListHeader = styled.h1`
-  text-align: center;
-  color: #705112;
+const TokenList = styled.div`
+  display: flex;
+  flex-flow: row wrap;
 `;
 
-const TokenList = styled.ul`
-  justify-content: center;
-  align-item: center;
-`;
-const TokenListRow = styled.li`
-  justify-content: center;
+const TokenListRow = styled.div<{ flavor: string }>`
   cursor: pointer;
-`;
-const H4 = styled.h4<{ flavor: string }>`
-  color: ${props => WAFFLE_COLORS[props.flavor]};
+  flex-flow: column;
+  text-align: center;
+  width: 33%;
+  min-height: 25vh;
+  border: solid 0.1vh blanchedalmond;
+  float: left;
+  background-color: ${props => WAFFLE_COLORS[props.flavor]};
+  opacity: 90%;
+  color: #5b4131;
+
+  ${({ flavor }) =>
+    flavor === '1' &&
+    `
+    color: #F3E5AB;
+  `}
 `;
 
-const Span = styled.span<{ flavor: string }>`
-  color: ${props => WAFFLE_COLORS[props.flavor]};
-`;
 const B = styled.b``;
