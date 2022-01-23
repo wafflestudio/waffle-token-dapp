@@ -67,7 +67,7 @@ export function HomePage() {
       <Container>
         <Header />
         <Account draggable="true">your account is {account}</Account>
-        <h1>Contacts</h1>
+        <h1>Waffle Tokens</h1>
         <ul>
           {waffles.map((waffle, index) => (
             <li key={`${waffle.name}-${index}`}>
